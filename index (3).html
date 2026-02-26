@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taste of Vietnam - Explore Vietnamese Cuisine & Culture with AI</title>
+    <meta name="description" content="Discover authentic Vietnamese dishes and learn about Vietnamese culture, history, and culinary traditions with our AI assistant.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==================== Variables ==================== */
+        :root {
+            --primary: #d4161d;
+            --primary-dark: #b01218;
+            --primary-light: #e63a42;
+            --secondary: #f0dc3d;
+            --accent: #2c3e50;
+            --text: #1a1a1a;
+            --text-light: #666;
+            --bg: #ffffff;
+            --bg-light: #f8f9fa;
+            --border: #e0e0e0;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            
+            --font-primary: 'Noto Sans', sans-serif;
+            --font-secondary: 'Noto Sans', sans-serif;
+            
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-md: 0 8px 16px rgba(0,0,0,0.1);
+            --shadow-lg: 0 16px 32px rgba(0,0,0,0.15);
+        }
+
+        /* ==================== Reset ==================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ==================== Header ==================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            padding: 0.5rem 0;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-icon {
+            display: none;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .logo-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-tagline {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
+
+        /* Navigation */
+        .nav-menu {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '-';
+            margin-left: 6px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link:hover::after,
+        .nav-link.active::after {
+            opacity: 1;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .language-toggle {
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .language-toggle:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* ==================== Hero Section ==================== */
+        .hero {
+            margin-top: 60px;
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, #fff5f5 0%, #fffef7 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(212, 22, 29, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(212, 22, 29, 0.1);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-title .gradient-text strong {
+            font-weight: 900;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 1.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Visual - Carousel */
+        .hero-visual {
+            position: relative;
+            height: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-carousel-container {
+            width: 100%;
+            max-width: 520px;
+            aspect-ratio: 16 / 9;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-dish-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.6s ease;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-carousel-container:hover .carousel-nav {
+            opacity: 1;
+        }
+
+        .carousel-nav button {
+            pointer-events: all;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-nav button:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.15);
+        }
+
+        .hero-dish-caption {
+            margin-top: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        /* ==================== Features Section ==================== */
+        .features {
+            padding: 80px 2rem;
+            background: white;
+        }
+
+        .features-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .section-title .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .feature-desc {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ==================== Dishes Section ==================== */
+        .dishes-section {
+            padding: 80px 2rem;
+            background: var(--bg-light);
+        }
+
+        .dishes-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .dish-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dish-container:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .dish-img {
+            width: 100%;
+            height: 200px;
+            display: block;
+            object-fit: cover;
+        }
+
+        .dish-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            min-height: 160px;
+        }
+
+        .dish-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+        }
+
+        .dish-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 0;
+            flex-grow: 1;
+        }
+
+        .dish-origin {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: auto;
+        }
+
+        /* ==================== AI Section ==================== */
+        .ai-section {
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, rgba(212, 22, 29, 0.05) 0%, rgba(240, 220, 61, 0.05) 100%);
+            position: relative;
+        }
+
+        .ai-section::before {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(212, 22, 29, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .ai-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ai-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .ai-header .section-title {
+            margin-bottom: 1rem;
+        }
+
+        .ai-header .section-subtitle {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .ai-boxes {
+            max-width: 1100px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .ai-box {
+            padding: 1.6rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ai-box h3 {
+            margin-bottom: 0.6rem;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .ai-box p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 0.6rem;
+        }
+
+        .ai-box ul {
+            margin-top: 0.8rem;
+            color: var(--text-light);
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .ai-box ul li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-box ul li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .ai-box:first-child {
+            background: white;
+        }
+
+        .ai-box:last-child {
+            background: linear-gradient(180deg, #fff, #fffaf0);
+        }
+
+        /* ==================== Footer ==================== */
+        .footer {
+            padding: 4rem 2rem;
+            background: var(--text);
+            color: white;
+            margin-top: 4rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== Chatbot Styles ==================== */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 380px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+        }
+
+        .chatbot-widget.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-header h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .chatbot-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            opacity: 0.8;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 75%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: var(--primary);
+            color: white;
+            border-radius: 8px 0px 8px 8px;
+        }
+
+        .message.bot .message-content {
+            background: var(--bg-light);
+            color: var(--text);
+            border-radius: 0px 8px 8px 8px;
+        }
+
+        .chatbot-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.7rem;
+            font-family: var(--font-primary);
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chatbot-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .chatbot-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-send:hover {
+            background: var(--primary-dark);
+        }
+
+        .chatbot-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 998;
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .chatbot-toggle.hidden {
+            display: none;
+        }
+
+        /* ==================== Responsive ==================== */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .hero-visual {
+                height: 250px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .chatbot-widget {
+                width: 100%;
+                max-width: 100%;
+                height: 100vh;
+                border-radius: 0;
+                bottom: 0;
+                right: 0;
+                max-height: 100vh;
+            }
+
+            .chatbot-toggle {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .ai-boxes {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .hero {
+                padding: 40px 1rem;
+                margin-top: 50px;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .dishes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-text">
+                    <div class="logo-brand">Taste of Vietnam</div>
+                    <div class="logo-tagline" id="logoTagline">Culinary & Culture</div>
+                </div>
+            </a>
+
+            <ul class="nav-menu">
+                <li><a class="nav-link active" id="navHome" onclick="scrollToSection('hero')">Home</a></li>
+                <li><a class="nav-link" id="navFeatures" onclick="scrollToSection('features')">Features</a></li>
+                <li><a class="nav-link" id="navDishes" onclick="scrollToSection('dishes')">Dishes</a></li>
+                <li><a class="nav-link" id="navAbout" onclick="scrollToSection('about')">About us</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div style="position:relative; margin-right:0.8rem;">
+                    <input id="searchInput" placeholder="Search dishes..." oninput="filterDishes()" style="padding:0.45rem 2.4rem 0.45rem 0.8rem;border:1px solid var(--border);border-radius:6px;font-size:0.95rem;width:200px;">
+                    <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text-light)">🔍</span>
+                </div>
+                <button class="language-toggle" onclick="toggleLanguage()">
+                    <span id="countryEmoji">🇻🇳</span>
+                    <span id="langDisplay">VN</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-container">
+            <div>
+                <div class="hero-badge" id="heroBadge">
+                    <span>AI-Powered Culinary Guide</span>
+                </div>
+                <h1 class="hero-title" id="heroTitle">
+                    Discover <span class="gradient-text">Vietnamese Flavors</span>
+                </h1>
+                <p class="hero-subtitle" id="heroSubtitle">
+                    Explore authentic Vietnamese dishes and learn cultural stories with our AI assistant. Bilingual support for tourists and locals.
+                </p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="scrollToSection('dishes')" id="btnBrowse">
+                        Browse Dishes
+                    </button>
+                    <button class="btn btn-secondary" onclick="openChatbot()" id="btnChat">
+                        Chat with AI
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-carousel-container">
+                    <img class="hero-dish-image" id="heroDishImage" src="" alt="Vietnamese Dish">
+                    <div class="carousel-nav">
+                        <button onclick="prevDish()" title="Previous">❮</button>
+                        <button onclick="nextDish()" title="Next">❯</button>
+                    </div>
+                </div>
+                <div class="hero-dish-caption" id="heroDishCaption"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose <span class="gradient-text">Taste of Vietnam?</span></h2>
+                <p class="section-subtitle" id="featuresSubtitle">
+                    Our AI-powered platform provides authentic information about Vietnamese cuisine and culture.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title" id="featureTitle1">AI Assistant</h3>
+                    <p class="feature-desc" id="featureDesc1">Personal dish suggestions, recipes, and stories.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title" id="featureTitle2">Bilingual</h3>
+                    <p class="feature-desc" id="featureDesc2">English and Vietnamese support for all users.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍🍳</div>
+                    <h3 class="feature-title" id="featureTitle3">Authentic Recipes</h3>
+                    <p class="feature-desc" id="featureDesc3">Step-by-step guides from regional cooks.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title" id="featureTitle4">Cultural Stories</h3>
+                    <p class="feature-desc" id="featureDesc4">Learn the history and traditions behind each dish with AI narration.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dishes Section -->
+    <section id="dishes" class="dishes-section">
+        <div class="dishes-container">
+            <div class="section-header">
+                <h2 class="section-title">Popular <span class="gradient-text">Vietnamese Dishes</span></h2>
+                <p class="section-subtitle" id="dishesSubtitle">
+                    Explore some of the most beloved Vietnamese dishes from different regions.
+                </p>
+            </div>
+            <div class="dishes-grid" id="dishesGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Section -->
+    <section class="ai-section" id="about">
+        <div class="ai-container">
+            <div class="ai-header">
+                <h2 class="section-title">Meet Our <span class="gradient-text">AI Assistant</span></h2>
+                <p class="section-subtitle" id="aiSubtitle">
+                    Powered by advanced AI technology, our chatbot is ready to help you explore Vietnamese cuisine and culture in depth.
+                </p>
+            </div>
+            <div class="ai-boxes">
+                <div class="ai-box">
+                    <h3 id="aiBoxTitle1">About Taste of Vietnam</h3>
+                    <p id="aiBoxDesc1">
+                        Taste of Vietnam is a student-built project showcasing Vietnamese culinary heritage with AI-powered exploration. Our mission is to connect users—locals and visitors alike—with authentic recipes, regional insights, and cultural stories behind each dish.
+                    </p>
+                    <ul id="aiBoxList1">
+                        <li id="aiBoxListItem1">Curated regional recipes and histories</li>
+                        <li id="aiBoxListItem2">Interactive AI that explains culture and cooking</li>
+                        <li id="aiBoxListItem3">Bilingual content for accessibility</li>
+                    </ul>
+                </div>
+                <div class="ai-box">
+                    <h3 id="aiBoxTitle2">Our Approach</h3>
+                    <p id="aiBoxDesc2">
+                        We combine design, curated culinary knowledge, and AI to create an approachable learning experience. The chatbot is tuned to provide concise, accurate historical context as well as practical cooking tips.
+                    </p>
+                    <p id="aiBoxDesc3">For reliable AI responses, deploy a server-side proxy to keep API keys secure. If you need, we can scaffold that quickly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>About</h3>
+                <p id="footerAbout">
+                    Taste of Vietnam is an AI-powered platform dedicated to sharing the authentic flavors, history, and culture of Vietnamese cuisine.
+                </p>
+            </div>
+            <div class="footer-section">
+                <h3 id="footerLinksTitle">Quick Links</h3>
+                <ul>
+                    <li><a href="#" onclick="scrollToSection('dishes')">Dishes</a></li>
+                    <li><a href="#" onclick="scrollToSection('features')">Features</a></li>
+                    <li><a href="#" onclick="scrollToSection('about')">About</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 id="footerContactTitle">Contact</h3>
+                <ul>
+                    <li><a href="/cdn-cgi/l/email-protection#5b3834352f3a382f1b2f3a282f3e343d2d323e2f353a3675383436">Email</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3 id="footerFollowTitle">Follow Us</h3>
+                <ul>
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p id="footerBottom">&copy; 2026 Taste of Vietnam. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <button class="chatbot-toggle" id="chatbotToggle" onclick="openChatbot()">
+        <span>💬</span>
+    </button>
+
+    <div class="chatbot-widget" id="chatbotWidget">
+        <div class="chatbot-header">
+            <h3 id="chatbotTitle">How can I help?</h3>
+            <button class="chatbot-close" onclick="closeChatbot()">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot">
+                <div class="message-content" id="welcomeMsg">
+                    Hi! 👋 I'm your AI guide to Vietnamese cuisine and culture. Ask me about any dish or tradition!
+                </div>
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input 
+                type="text" 
+                class="chatbot-input" 
+                id="chatbotInput" 
+                placeholder="Ask me anything..." 
+                onkeypress="handleChatKeyPress(event)"
+            >
+            <button class="chatbot-send" onclick="sendMessage()">✈️</button>
+        </div>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // ==================== Language Management ====================
+        let currentLanguage = 'en';
+
+        const translations = {
+            en: {
+                heroBadge: 'AI-Powered Culinary Guide',
+                heroTitle: 'Discover <span class="gradient-text"><strong>Vietnamese Flavors</strong></span>',
+                heroSubtitle: 'Explore authentic Vietnamese dishes and learn cultural stories with our AI assistant. Bilingual support for tourists and locals.',
+                navHome: 'Home',
+                navFeatures: 'Features',
+                navDishes: 'Dishes',
+                navAbout: 'About us',
+                logoTagline: 'Culinary & Culture',
+                featuresSubtitle: 'Our AI-powered platform provides authentic information about Vietnamese cuisine and culture.',
+                featureTitle1: 'AI Assistant',
+                featureDesc1: 'Personal dish suggestions, recipes, and stories.',
+                featureTitle2: 'Bilingual',
+                featureDesc2: 'English and Vietnamese support for all users.',
+                featureTitle3: 'Authentic Recipes',
+                featureDesc3: 'Step-by-step guides from regional cooks.',
+                featureTitle4: 'Cultural Stories',
+                featureDesc4: 'Learn the history and traditions behind each dish with AI narration.',
+                dishesSubtitle: 'Explore beloved Vietnamese dishes from various regions.',
+                aiSubtitle: 'Powered by advanced AI, ask about food, recipes, and culture.',
+                aiBoxTitle1: 'About Taste of Vietnam',
+                aiBoxDesc1: 'Taste of Vietnam is a student-built project showcasing Vietnamese culinary heritage with AI-powered exploration. Our mission is to connect users—locals and visitors alike—with authentic recipes, regional insights, and cultural stories behind each dish.',
+                aiBoxListItem1: 'Curated regional recipes and histories',
+                aiBoxListItem2: 'Interactive AI that explains culture and cooking',
+                aiBoxListItem3: 'Bilingual content for accessibility',
+                aiBoxTitle2: 'Our Approach',
+                aiBoxDesc2: 'We combine design, curated culinary knowledge, and AI to create an approachable learning experience. The chatbot is tuned to provide concise, accurate historical context as well as practical cooking tips.',
+                aiBoxDesc3: 'For reliable AI responses, deploy a server-side proxy to keep API keys secure. If you need, we can scaffold that quickly.',
+                footerAbout: 'Taste of Vietnam shares authentic flavors, history, and culinary culture.',
+                footerLinksTitle: 'Quick Links',
+                footerContactTitle: 'Contact',
+                footerFollowTitle: 'Follow Us',
+                footerBottom: '© 2026 Taste of Vietnam. All rights reserved.',
+                chatbotTitle: 'How can I help?',
+                welcomeMsg: 'Hi! 👋 I\'m your AI guide to Vietnamese cuisine and culture. Ask me about any dish or tradition!',
+                inputPlaceholder: 'Ask me anything...',
+                searchPlaceholder: 'Search dishes...',
+                btnBrowse: 'Browse Dishes',
+                btnChat: 'Chat with AI',
+                dishes: [
+                    { name: 'Pho', desc: 'A traditional Vietnamese soup with noodles and broth', origin: 'North Vietnam', image: 'https://bizweb.dktcdn.net/100/477/987/products/pho-bo-ha-noi-jpeg.jpg?v=1712628941747' },
+                    { name: 'Banh Mi', desc: 'Vietnamese sandwich with various fillings', origin: 'Saigon', image: 'https://cdn.tgdd.vn/Files/2022/01/27/1413238/tong-hop-cac-loai-banh-mi-ngon-doc-dao-noi-tieng-tren-the-gioi-202201270531526496.jpg' },
+                    { name: 'Com Tam', desc: 'Broken rice with various toppings and proteins', origin: 'South Vietnam', image: 'https://i.ytimg.com/vi/h__kLq8NG2I/maxresdefault.jpg' },
+                    { name: 'Spring Rolls', desc: 'Fresh or fried rolls with vegetables and protein', origin: 'Central Vietnam', image: 'https://khaihoanphuquoc.com.vn/wp-content/uploads/2023/11/nu%CC%9Bo%CC%9B%CC%81c-ma%CC%86%CC%81m-cha%CC%82%CC%81m-go%CC%89i-cuo%CC%82%CC%81n-1200x675.png' },
+                    { name: 'Bun Cha', desc: 'Grilled pork with rice vermicelli and dipping sauce', origin: 'Hanoi', image: 'https://cooponline.vn/tin-tuc/wp-content/uploads/2025/10/hoc-cach-lam-bun-cha-mien-bac-chuan-ha-noi-tai-nha.png' },
+                    { name: 'Hu Tieu', desc: 'Clear soup with tapioca noodles and seafood', origin: 'Mekong Delta', image: 'https://lh4.googleusercontent.com/proxy/Ed62MP6tKDb_vr0mdGMO_DWgsKcDWJkXTxbM6EpFtn1h9ILNPpaYTE91xKIiId9_fzqvxv22XVE_OCAQXrzJbfKl3LPgT0njRBpzWtzr6BxxPiX0X5Uz0gCq1U7k8foSfRzwye02E2_UqhDh1MD29ckBONj3Kg1telnP2l7C' },
+                    { name: 'Nem Nuong', desc: 'Grilled pork patties wrapped in rice paper', origin: 'Central Vietnam', image: 'https://www.nhahangquangon.com/wp-content/uploads/2017/01/nem-nuong-qua-ngon.jpg' },
+                    { name: 'Cao Lau', desc: 'Yellow noodles with pork and greens', origin: 'Hoi An', image: 'https://i-giadinh.vnecdn.net/2023/03/13/Buoc-7-Thanh-pham-1-7-9577-1678700377.jpg' },
+                    { name: 'Cha Ca', desc: 'Turmeric fish with dill and vermicelli', origin: 'Hanoi', image: 'https://i.ytimg.com/vi/ZLwCwyIDJJ4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC28T49o72JuvhoihtNNUQvmAyCWA' },
+                    { name: 'Banh Xeo', desc: 'Crispy savory pancake filled with pork and shrimp', origin: 'Southern Vietnam', image: 'https://www.huongnghiepaau.com/wp-content/uploads/2017/02/cach-lam-banh-xeo-mien-trung.jpg' }
+                ]
+            },
+            vi: {
+                heroBadge: 'Hướng Dẫn Ẩm Thực Được AI Hỗ Trợ',
+                heroTitle: 'Khám Phá <span class="gradient-text"><strong><br>Hương Vị Việt Nam</strong></span>',
+                heroSubtitle: 'Khám phá các món ăn Việt Nam chính hiệu và nghe những câu chuyện văn hóa từ trợ lý AI. Hỗ trợ song ngữ cho du khách và người địa phương.',
+                navHome: 'Trang chủ',
+                navFeatures: 'Tính năng',
+                navDishes: 'Món ăn',
+                navAbout: 'Giới thiệu',
+                logoTagline: 'Ẩm Thực & Văn Hóa',
+                featuresSubtitle: 'Nền tảng được hỗ trợ bởi AI cung cấp thông tin chính xác về ẩm thực và văn hóa Việt Nam.',
+                featureTitle1: 'Trợ Lý AI',
+                featureDesc1: 'Gợi ý món ăn, công thức và câu chuyện văn hóa.',
+                featureTitle2: 'Hỗ Trợ Song Ngữ',
+                featureDesc2: 'Tiếng Anh và tiếng Việt cho mọi người dùng.',
+                featureTitle3: 'Công Thức Chính Hiệu',
+                featureDesc3: 'Hướng dẫn chi tiết từ các đầu bếp vùng miền.',
+                featureTitle4: 'Câu Chuyện Văn Hóa',
+                featureDesc4: 'Bối cảnh lịch sử và truyền thống đằng sau món ăn.',
+                dishesSubtitle: 'Khám phá những món ăn Việt Nam được yêu thích từ các vùng.',
+                aiSubtitle: 'Được hỗ trợ bởi AI tiên tiến, hỏi về món ăn, công thức và văn hóa.',
+                aiBoxTitle1: 'Về Taste of Vietnam',
+                aiBoxDesc1: 'Taste of Vietnam là một dự án do sinh viên xây dựng, giới thiệu di sản ẩm thực Việt Nam với khám phá được hỗ trợ bởi AI. Sứ mệnh của chúng tôi là kết nối người dùng—cả người địa phương lẫn du khách—với các công thức chính hiệu, thông tin khu vực và những câu chuyện văn hóa đằng sau mỗi món ăn.',
+                aiBoxListItem1: 'Công thức và lịch sử vùng được tuyển chọn',
+                aiBoxListItem2: 'AI tương tác giải thích văn hóa và nấu ăn',
+                aiBoxListItem3: 'Nội dung song ngữ để dễ tiếp cận',
+                aiBoxTitle2: 'Cách Tiếp Cận Của Chúng Tôi',
+                aiBoxDesc2: 'Chúng tôi kết hợp thiết kế, kiến thức ẩm thực được tuyển chọn và AI để tạo ra một trải nghiệm học tập dễ tiếp cận. Chatbot được điều chỉnh để cung cấp bối cảnh lịch sử ngắn gọn, chính xác cũng như những mẹo nấu ăn thực tế.',
+                aiBoxDesc3: 'Để có phản hồi AI đáng tin cậy, triển khai proxy phía máy chủ để giữ khóa API an toàn. Nếu cần, chúng tôi có thể nhanh chóng xây dựng điều đó.',
+                footerAbout: 'Taste of Vietnam chia sẻ hương vị chính hiệu, lịch sử và văn hóa ẩm thực Việt Nam.',
+                footerLinksTitle: 'Liên Kết Nhanh',
+                footerContactTitle: 'Liên Hệ',
+                footerFollowTitle: 'Theo Dõi Chúng Tôi',
+                footerBottom: '© 2026 Taste of Vietnam. Bảo lưu mọi quyền.',
+                chatbotTitle: 'Tôi có thể giúp gì?',
+                welcomeMsg: 'Xin chào! 👋 Tôi là trợ lý AI về ẩm thực và văn hóa Việt Nam. Hãy hỏi tôi về món ăn hoặc truyền thống!',
+                inputPlaceholder: 'Hỏi tôi điều gì...',
+                searchPlaceholder: 'Tìm kiếm món ăn...',
+                btnBrowse: 'Duyệt Món Ăn',
+                btnChat: 'Chat với AI',
+                dishes: [
+                    { name: 'Phở', desc: 'Canh truyền thống với bánh phở và nước dùng', origin: 'Miền Bắc', image: 'https://bizweb.dktcdn.net/100/477/987/products/pho-bo-ha-noi-jpeg.jpg?v=1712628941747' },
+                    { name: 'Bánh Mì', desc: 'Bánh sandwich Việt Nam với nhiều loại nhân', origin: 'Sài Gòn', image: 'https://cdn.tgdd.vn/Files/2022/01/27/1413238/tong-hop-cac-loai-banh-mi-ngon-doc-dao-noi-tieng-tren-the-gioi-202201270531526496.jpg' },
+                    { name: 'Cơm Tấm', desc: 'Cơm vỡ với nhiều loại topping', origin: 'Miền Nam', image: 'https://i.ytimg.com/vi/h__kLq8NG2I/maxresdefault.jpg' },
+                    { name: 'Gỏi Cuốn', desc: 'Cuốn tươi với rau và tôm/thịt', origin: 'Miền Trung', image: 'https://khaihoanphuquoc.com.vn/wp-content/uploads/2023/11/nu%CC%9Bo%CC%9B%CC%81c-ma%CC%86%CC%81m-cha%CC%82%CC%81m-go%CC%89i-cuo%CC%82%CC%81n-1200x675.png' },
+                    { name: 'Bún Chả', desc: 'Thịt lợn nướng với bún và nước chấm', origin: 'Hà Nội', image: 'https://cooponline.vn/tin-tuc/wp-content/uploads/2025/10/hoc-cach-lam-bun-cha-mien-bac-chuan-ha-noi-tai-nha.png' },
+                    { name: 'Hủ Tiếu', desc: 'Bánh canh và hải sản', origin: 'Đồng Bằng Sông Cửu Long', image: 'https://lh4.googleusercontent.com/proxy/Ed62MP6tKDb_vr0mdGMO_DWgsKcDWJkXTxbM6EpFtn1h9ILNPpaYTE91xKIiId9_fzqvxv22XVE_OCAQXrzJbfKl3LPgT0njRBpzWtzr6BxxPiX0X5Uz0gCq1U7k8foSfRzwye02E2_UqhDh1MD29ckBONj3Kg1telnP2l7C' },
+                    { name: 'Nem Nướng', desc: 'Thịt nướng quấn bánh tráng', origin: 'Miền Trung', image: 'https://www.nhahangquangon.com/wp-content/uploads/2017/01/nem-nuong-qua-ngon.jpg' },
+                    { name: 'Cao Lầu', desc: 'Mì đặc trưng Hội An với thịt lợn và rau', origin: 'Hội An', image: 'https://i-giadinh.vnecdn.net/2023/03/13/Buoc-7-Thanh-pham-1-7-9577-1678700377.jpg' },
+                    { name: 'Chả Cá', desc: 'Cá ướp nghệ với thì là và bún', origin: 'Hà Nội', image: 'https://i.ytimg.com/vi/ZLwCwyIDJJ4/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLC28T49o72JuvhoihtNNUQvmAyCWA' },
+                    { name: 'Bánh Xèo', desc: 'Bánh xèo giòn với nhân tôm và thịt', origin: 'Miền Nam', image: 'https://www.huongnghiepaau.com/wp-content/uploads/2017/02/cach-lam-banh-xeo-mien-trung.jpg' }
+                ]
+            }
+        };
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'vi' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            const trans = translations[currentLanguage];
+
+            // Update language display
+            document.getElementById('langDisplay').textContent = currentLanguage === 'en' ? 'EN' : 'VN';
+            document.getElementById('countryEmoji').textContent = currentLanguage === 'en' ? '🇺🇸' : '🇻🇳';
+
+            // Update placeholders and basic text
+            document.getElementById('searchInput').placeholder = trans.searchPlaceholder;
+            document.getElementById('heroBadge').textContent = trans.heroBadge;
+            document.getElementById('heroSubtitle').textContent = trans.heroSubtitle;
+            document.getElementById('logoTagline').textContent = trans.logoTagline;
+            document.getElementById('heroTitle').innerHTML = trans.heroTitle;
+
+            // Buttons
+            document.getElementById('btnBrowse').textContent = trans.btnBrowse;
+            document.getElementById('btnChat').textContent = trans.btnChat;
+
+            // Nav labels
+            document.getElementById('navHome').textContent = trans.navHome;
+            document.getElementById('navFeatures').textContent = trans.navFeatures;
+            document.getElementById('navDishes').textContent = trans.navDishes;
+            document.getElementById('navAbout').textContent = trans.navAbout;
+
+            // Features
+            document.getElementById('featuresSubtitle').textContent = trans.featuresSubtitle;
+            document.getElementById('featureTitle1').textContent = trans.featureTitle1;
+            document.getElementById('featureDesc1').textContent = trans.featureDesc1;
+            document.getElementById('featureTitle2').textContent = trans.featureTitle2;
+            document.getElementById('featureDesc2').textContent = trans.featureDesc2;
+            document.getElementById('featureTitle3').textContent = trans.featureTitle3;
+            document.getElementById('featureDesc3').textContent = trans.featureDesc3;
+            document.getElementById('featureTitle4').textContent = trans.featureTitle4;
+            document.getElementById('featureDesc4').textContent = trans.featureDesc4;
+
+            // Dishes and AI section
+            document.getElementById('dishesSubtitle').textContent = trans.dishesSubtitle;
+            document.getElementById('aiSubtitle').textContent = trans.aiSubtitle;
+
+            // AI Boxes
+            document.getElementById('aiBoxTitle1').textContent = trans.aiBoxTitle1;
+            document.getElementById('aiBoxDesc1').textContent = trans.aiBoxDesc1;
+            document.getElementById('aiBoxListItem1').textContent = trans.aiBoxListItem1;
+            document.getElementById('aiBoxListItem2').textContent = trans.aiBoxListItem2;
+            document.getElementById('aiBoxListItem3').textContent = trans.aiBoxListItem3;
+            document.getElementById('aiBoxTitle2').textContent = trans.aiBoxTitle2;
+            document.getElementById('aiBoxDesc2').textContent = trans.aiBoxDesc2;
+            document.getElementById('aiBoxDesc3').textContent = trans.aiBoxDesc3;
+
+            // Footer and chatbot
+            document.getElementById('footerAbout').textContent = trans.footerAbout;
+            document.getElementById('footerLinksTitle').textContent = trans.footerLinksTitle;
+            document.getElementById('footerContactTitle').textContent = trans.footerContactTitle;
+            document.getElementById('footerFollowTitle').textContent = trans.footerFollowTitle;
+            document.getElementById('footerBottom').textContent = trans.footerBottom;
+            document.getElementById('chatbotTitle').textContent = trans.chatbotTitle;
+            document.getElementById('chatbotInput').placeholder = trans.inputPlaceholder;
+
+            // Welcome message (only replace if no conversation yet)
+            const messages = document.querySelectorAll('.message');
+            if (messages.length === 1) {
+                document.getElementById('welcomeMsg').textContent = trans.welcomeMsg;
+            }
+
+            // Rebuild dishes grid and reset hero rotation
+            updateDishesGrid();
+            resetHeroRotation();
+        }
+
+        function updateDishesGrid() {
+            const trans = translations[currentLanguage];
+            const dishesGrid = document.getElementById('dishesGrid');
+            dishesGrid.innerHTML = '';
+
+            trans.dishes.forEach((dish) => {
+                const dishEl = document.createElement('div');
+                dishEl.className = 'dish-container';
+
+                const img = document.createElement('img');
+                img.className = 'dish-img';
+                img.src = dish.image;
+                img.alt = dish.name;
+
+                dishEl.innerHTML = `
+                    <div class="dish-info">
+                        <h3 class="dish-title">${dish.name}</h3>
+                        <p class="dish-desc">${dish.desc}</p>
+                        <p class="dish-origin">📍 ${dish.origin}</p>
+                    </div>
+                `;
+                dishEl.insertBefore(img, dishEl.firstChild);
+
+                dishEl.onclick = () => openChatbotWithMessage(dish.name);
+                dishesGrid.appendChild(dishEl);
+            });
+        }
+
+        // ==================== Chatbot Functions ====================
+        const API_URL = '/api/chat';
+
+        function openChatbot() {
+            document.getElementById('chatbotWidget').classList.add('active');
+            document.getElementById('chatbotToggle').classList.add('hidden');
+            document.getElementById('chatbotInput').focus();
+        }
+
+        function closeChatbot() {
+            document.getElementById('chatbotWidget').classList.remove('active');
+            document.getElementById('chatbotToggle').classList.remove('hidden');
+        }
+
+        function openChatbotWithMessage(dishName) {
+            openChatbot();
+            const prompt = currentLanguage === 'vi' ? `Hãy kể cho tôi về ${dishName}` : `Tell me more about ${dishName}`;
+            document.getElementById('chatbotInput').value = prompt;
+            sendMessage();
+        }
+
+        function filterDishes() {
+            const q = document.getElementById('searchInput').value.trim().toLowerCase();
+            const items = document.querySelectorAll('.dish-container');
+            items.forEach(item => {
+                const title = item.querySelector('.dish-title').textContent.toLowerCase();
+                item.style.display = title.includes(q) ? '' : 'none';
+            });
+        }
+
+        // ==================== Hero Carousel ====================
+        let heroRotationTimer = null;
+        let currentDishIndex = 0;
+        let isCarouselLocked = false;
+
+        function resetHeroRotation() {
+            const trans = translations[currentLanguage];
+            const dishes = trans.dishes;
+            const imgEl = document.getElementById('heroDishImage');
+            const capEl = document.getElementById('heroDishCaption');
+            if (!imgEl) return;
+
+            currentDishIndex = 0;
+            if (heroRotationTimer) clearInterval(heroRotationTimer);
+            
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = dishes[0].image;
+                capEl.textContent = `${dishes[0].name} — ${dishes[0].origin}`;
+                imgEl.style.opacity = 1;
+            }, 200);
+
+            heroRotationTimer = setInterval(() => {
+                if (!isCarouselLocked) {
+                    currentDishIndex = (currentDishIndex + 1) % dishes.length;
+                    updateCarouselImage();
+                }
+            }, 3500);
+        }
+
+        function updateCarouselImage() {
+            const trans = translations[currentLanguage];
+            const dishes = trans.dishes;
+            const imgEl = document.getElementById('heroDishImage');
+            const capEl = document.getElementById('heroDishCaption');
+
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = dishes[currentDishIndex].image;
+                capEl.textContent = `${dishes[currentDishIndex].name} — ${dishes[currentDishIndex].origin}`;
+                imgEl.style.opacity = 1;
+            }, 500);
+        }
+
+        function nextDish() {
+            const trans = translations[currentLanguage];
+            currentDishIndex = (currentDishIndex + 1) % trans.dishes.length;
+            lockCarousel();
+            updateCarouselImage();
+        }
+
+        function prevDish() {
+            const trans = translations[currentLanguage];
+            currentDishIndex = (currentDishIndex - 1 + trans.dishes.length) % trans.dishes.length;
+            lockCarousel();
+            updateCarouselImage();
+        }
+
+        function lockCarousel() {
+            isCarouselLocked = true;
+            setTimeout(() => {
+                isCarouselLocked = false;
+            }, 7000);
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            addMessage(message, 'user');
+            input.value = '';
+
+            const messagesDiv = document.getElementById('chatbotMessages');
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot';
+            loadingDiv.innerHTML = '<div class="message-content">⏳ Processing...</div>';
+            messagesDiv.appendChild(loadingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt: message, language: currentLanguage })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const botMessage = data.reply || (currentLanguage === 'en' ? 'No response from AI.' : 'Không có phản hồi từ AI.');
+
+                loadingDiv.remove();
+                addMessage(botMessage, 'bot');
+            } catch (error) {
+                loadingDiv.remove();
+                addMessage(
+                    currentLanguage === 'en'
+                        ? '⚠️ Unable to connect to AI service. Please check the server proxy or try again later.'
+                        : '⚠️ Không thể kết nối với dịch vụ AI. Vui lòng kiểm tra proxy máy chủ hoặc thử lại sau.',
+                    'bot'
+                );
+                console.error('Error:', error);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatbotMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // ==================== Utility Functions ====================
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            const map = {
+                'hero': 'navHome',
+                'features': 'navFeatures',
+                'dishes': 'navDishes',
+                'about': 'navAbout'
+            };
+            
+            const target = map[sectionId];
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            if (target) document.getElementById(target).classList.add('active');
+        }
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLanguage();
+        });
+    </script>
+</body>
+</html>
